@@ -7,21 +7,10 @@ import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-<<<<<<< HEAD
-
-import com.github.paolorotolo.appintro.AppIntro;
-=======
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-
-import com.arasthel.asyncjob.AsyncJob;
-import java.util.ArrayList;
-
-import io.cloudboost.CloudException;
-import io.cloudboost.CloudObject;
-import io.cloudboost.CloudObjectCallback;
->>>>>>> origin/master
 
 
 public class LauncherActivity extends AppCompatActivity implements View.OnClickListener {
