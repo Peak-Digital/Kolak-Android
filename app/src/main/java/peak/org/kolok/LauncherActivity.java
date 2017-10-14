@@ -1,5 +1,7 @@
 package peak.org.kolok;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.annotation.Nullable;
@@ -7,11 +9,10 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 
 import com.arasthel.asyncjob.AsyncJob;
-import com.github.paolorotolo.appintro.AppIntro;
-import com.github.paolorotolo.appintro.AppIntroFragment;
-
 import java.util.ArrayList;
 
 import io.cloudboost.CloudException;
@@ -19,11 +20,11 @@ import io.cloudboost.CloudObject;
 import io.cloudboost.CloudObjectCallback;
 
 
-public class LauncherActivity extends AppIntro implements LoginFragment.OnFragmentInteractionListener {
+public class LauncherActivity extends AppCompatActivity implements View.OnClickListener {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_launcher);
         // Note here that we DO NOT use setContentView();
 
         // Add your slide fragments here.
@@ -32,50 +33,51 @@ public class LauncherActivity extends AppIntro implements LoginFragment.OnFragme
         // Instead of fragments, you can also use our default slide
         // Just set a title, description, background and image. AppIntro will do the rest.
 
-        if(KolokCloud.cloudBoost == null)
-        {
+        if (KolokCloud.cloudBoost == null) {
             KolokCloud.cloudBoost.init(KolokCloud.CLOUDBOOST_APP_ID, KolokCloud.CLOUDBOOST_API_KEY);
         }
-
-
-        addSlide(new LoginFragment());
-
-
-        // OPTIONAL METHODS
-        // Override bar/separator color.
-        setBarColor(Color.parseColor("#3F51B5"));
-        setSeparatorColor(Color.parseColor("#2196F3"));
-
-        // Hide Skip/Done button.
-        showSkipButton(false);
-        setProgressButtonEnabled(false);
-
-        // Turn vibration on and set intensity.
-        // NOTE: you will probably need to ask VIBRATE permission in Manifest.
-        setVibrate(true);
-        setVibrateIntensity(30);
     }
 
-    @Override
-    public void onSkipPressed(Fragment currentFragment) {
-        super.onSkipPressed(currentFragment);
-        // Do something when users tap on Skip button.
-    }
 
     @Override
-    public void onDonePressed(Fragment currentFragment) {
-        super.onDonePressed(currentFragment);
-        // Do something when users tap on Done button.
-    }
-
-    @Override
-    public void onSlideChanged(@Nullable Fragment oldFragment, @Nullable Fragment newFragment) {
-        super.onSlideChanged(oldFragment, newFragment);
-        // Do something when the slide changes.
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri){
-        //you can leave it empty
+    public void onClick(View v) {
+        if (v.getId() == R.id.submitButton) {
+            final EditText et = (EditText) findViewById(R.id.emailLogin);
+            final EditText etPass = (EditText) findViewById(R.id.passLogin);
+            final EditText etPassVer = (EditText) findViewById(R.id.passLoginVer);
+            final String userEmail = et.getText().toString();
+            KolokCloud.getUser(userEmail, new CloudBoostCallback() {
+                @Override
+                public void methodToCallBack() {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            etPass.setVisibility(View.VISIBLE);
+                            etPassVer.setVisibility(View.VISIBLE);
+                            String userPass = etPass.getText().toString();
+                            KolokCloud.createUser(userEmail, userPass);
+                        }
+                    });
+                }
+            }, new CloudBoostCallback() {
+                @Override
+                public void methodToCallBack() {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            etPass.setVisibility(View.VISIBLE);
+                            String userPass = etPass.getText().toString();
+                            KolokCloud.loginUser(userEmail, userPass, new CloudBoostCallback() {
+                                @Override
+                                public void methodToCallBack() {
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+            Intent myIntent = new Intent(this, IssueActivity.class);
+            startActivity(myIntent);
+        }
     }
 }

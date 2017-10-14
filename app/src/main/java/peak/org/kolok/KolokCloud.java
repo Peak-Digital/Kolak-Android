@@ -4,6 +4,7 @@ package peak.org.kolok;
  * Created by markrjr on 10/14/17.
  */
 
+import android.content.Intent;
 import android.util.Log;
 
 import com.arasthel.asyncjob.AsyncJob;
@@ -20,8 +21,9 @@ public class KolokCloud {
     static CloudApp cloudBoost = null;
 
 
-    static void createUser()
+    static void createUser(final String email, final String pass)
     {
+
         AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
             @Override
             public void doOnBackground() {
@@ -30,7 +32,9 @@ public class KolokCloud {
 
                  try
                     {
-                        newUser.set("blah", "blah");
+                        newUser.set("username", email);
+                        newUser.set("email", email);
+                        newUser.set("password", pass);
 
                         //Save the object
                         newUser.save(new CloudObjectCallback(){
@@ -38,9 +42,16 @@ public class KolokCloud {
                             public void done(CloudObject object, CloudException err) {
                                 if(err != null){
                                     Log.d("Kolok", "Failed.");
+                                    Log.d("Err", err.toString());
                                 }
                                 if(object != null){
                                     //object saved successfully
+                                    AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
+                                        @Override
+                                        public void doInUIThread() {
+                                            //doWhenFinished.methodToCallBack();
+                                        }
+                                    });
                                     Log.d("Kolok", "We did it.");
                                 }
                             }
@@ -54,9 +65,45 @@ public class KolokCloud {
         });
     }
 
-    static void getUser(final String email)
-    {
+    static void loginUser(final String email, final String password, final CloudBoostCallback onSuccess) {
+        Log.d("User: ", email);
+        Log.d("Pass: ", password);
+        AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
+            @Override
+            public void doOnBackground() {
+                CloudUser user = new CloudUser();
+                try
+                {
+                    user.setUserName(email);
+                    user.setPassword(password);
 
+                    //Login
+                    user.logIn(new CloudUserCallback(){
+                        @Override
+                        public void done(CloudUser object, CloudException e) {
+                            if(e != null){
+                                Log.d("Kolok", "Failed to login.");
+                                Log.d("Err", e.toString());
+                            }
+                            if(object != null){
+                                //object saved successfully
+                                Log.d("Kolok", "We logged in.");
+                                onSuccess.methodToCallBack();
+                            }
+                        }
+                    });
+                }
+                catch(CloudException e)
+                {
+                    Log.d("Kolok", "Failed to contact cloudboost.");
+                }
+            }
+        });
+    }
+
+    static void getUser(final String email, final CloudBoostCallback onFailure, final CloudBoostCallback onSuccess)
+    {
+        Log.d("Kolok", "In getUser Function");
         AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
             @Override
             public void doOnBackground() {
@@ -66,14 +113,17 @@ public class KolokCloud {
 
                 try
                 {
-                    query.find(new CloudObjectArrayCallback(){
+                    query.findOne(new CloudObjectCallback(){
                         @Override
-                        public void done(CloudObject[] x, CloudException t) {
+                        public void done(CloudObject x, CloudException t) {
                             if(x != null){
-                                //objects
+                                Log.d("Kolok", x.getId());
+                                onSuccess.methodToCallBack();
                             }
                             if(t != null){
                                 //any errors
+                                Log.d("Kolok", "Could not find User");
+                                onFailure.methodToCallBack();
                             }
                         }
                     });
