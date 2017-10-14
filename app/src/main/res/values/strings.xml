@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Kolok</string>
+    <string name="app_description">Kolok is an app that brings the politics to you. It allows you to voice your opinion on hot-button topics and get more information from reputable sources.</string>
+    <string name="loading_original">Rustling some jimmies...</string>
+    <string name="loading_almonds">Activating some almonds...</string>
+    <string name="loading_seabass">Grilling some chilean sea bass...</string>
+    <string name="loading_beans">Steaming some beans...</string>
+
 </resources>

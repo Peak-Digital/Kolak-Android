@@ -4,19 +4,9 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 
-import com.arasthel.asyncjob.AsyncJob;
 import com.github.paolorotolo.appintro.AppIntro;
-import com.github.paolorotolo.appintro.AppIntroFragment;
-
-import java.util.ArrayList;
-
-import io.cloudboost.CloudException;
-import io.cloudboost.CloudObject;
-import io.cloudboost.CloudObjectCallback;
 
 
 public class LauncherActivity extends AppIntro implements LoginFragment.OnFragmentInteractionListener {
