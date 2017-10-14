@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.arasthel.asyncjob.AsyncJob;
@@ -45,6 +46,8 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
             final EditText et = (EditText) findViewById(R.id.emailLogin);
             final EditText etPass = (EditText) findViewById(R.id.passLogin);
             final EditText etPassVer = (EditText) findViewById(R.id.passLoginVer);
+            final Button submit = (Button) findViewById(R.id.submitButton);
+            final Button signUp = (Button) findViewById(R.id.signUpSubmit);
             final String userEmail = et.getText().toString();
             KolokCloud.getUser(userEmail, new CloudBoostCallback() {
                 @Override
@@ -54,8 +57,8 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
                         public void run() {
                             etPass.setVisibility(View.VISIBLE);
                             etPassVer.setVisibility(View.VISIBLE);
-                            String userPass = etPass.getText().toString();
-                            KolokCloud.createUser(userEmail, userPass);
+                            submit.setVisibility(View.INVISIBLE);
+                            signUp.setVisibility(View.VISIBLE);
                         }
                     });
                 }
@@ -70,14 +73,35 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
                             KolokCloud.loginUser(userEmail, userPass, new CloudBoostCallback() {
                                 @Override
                                 public void methodToCallBack() {
+                                    Intent myIntent = new Intent(getApplicationContext(), IssueActivity.class);
+                                    startActivity(myIntent);
                                 }
                             });
                         }
                     });
                 }
             });
-            Intent myIntent = new Intent(this, IssueActivity.class);
-            startActivity(myIntent);
         }
+    }
+
+    public void onClickSubmit(View v) {
+        Log.d("KOLOK:", "WE in this bitch");
+        final EditText et = (EditText) findViewById(R.id.emailLogin);
+        final EditText etPass = (EditText) findViewById(R.id.passLogin);
+        final EditText etPassVer = (EditText) findViewById(R.id.passLoginVer);
+        final String userEmail = et.getText().toString();
+        final String userPass = etPass.getText().toString();
+        KolokCloud.createUser(userEmail, userPass, new CloudBoostCallback() {
+            @Override
+            public void methodToCallBack() {
+                KolokCloud.loginUser(userEmail, userPass, new CloudBoostCallback() {
+                    @Override
+                    public void methodToCallBack() {
+                        Intent myIntent = new Intent(getApplicationContext(), IssueActivity.class);
+                        startActivity(myIntent);
+                    }
+                });
+            }
+        });
     }
 }
