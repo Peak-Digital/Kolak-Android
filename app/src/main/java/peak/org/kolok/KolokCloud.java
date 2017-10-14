@@ -21,9 +21,10 @@ public class KolokCloud {
     static CloudApp cloudBoost = null;
 
 
-    static void createUser(final String email, final String pass)
+    static void createUser(final String email, final String pass, final CloudBoostCallback onSuccess)
     {
-
+        Log.d("USERNAME:",email);
+        Log.d("PASSWORD:", pass);
         AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
             @Override
             public void doOnBackground() {
@@ -49,7 +50,7 @@ public class KolokCloud {
                                     AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
                                         @Override
                                         public void doInUIThread() {
-                                            //doWhenFinished.methodToCallBack();
+                                            onSuccess.methodToCallBack();
                                         }
                                     });
                                     Log.d("Kolok", "We did it.");
@@ -117,7 +118,7 @@ public class KolokCloud {
                         @Override
                         public void done(CloudObject x, CloudException t) {
                             if(x != null){
-                                Log.d("Kolok", x.getId());
+                                Log.d("ID: ", x.getId());
                                 onSuccess.methodToCallBack();
                             }
                             if(t != null){
