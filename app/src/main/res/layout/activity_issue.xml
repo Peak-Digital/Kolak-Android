@@ -48,36 +48,31 @@
             android:textSize="24sp"
             android:visibility="gone" />
 
-        <com.daprlabs.cardstack.SwipeFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:swipedeck="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/swipe_card_layout"
+
+        <com.lorentzos.flingswipe.SwipeFlingAdapterView
+            android:id="@+id/frame"
+            android:background="#ffeee9e2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            app:rotation_degrees="15.5"
+            android:layout_marginBottom="20dp"
+            android:layout_above="@+id/relativeLayout"
+            android:layout_alignParentEnd="true" />
 
-            <com.daprlabs.cardstack.SwipeDeck
-                android:id="@+id/swipe_deck"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="40dp"
-                swipedeck:card_spacing="10dp"
-                swipedeck:max_visible="3"
-                swipedeck:opacity_end="0.33"
-                swipedeck:render_above="true"
-                swipedeck:rotation_degrees="15" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/relativeLayout">
 
             <TextView
+                android:layout_centerHorizontal="true"
+                android:id="@+id/baitQuestion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:text="WEW LADS" />
-
-            <ImageView
-                android:id="@+id/baitImage"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-        </com.daprlabs.cardstack.SwipeFrameLayout>
+                android:text="TextView" />
+        </RelativeLayout>
 
 
     </RelativeLayout>

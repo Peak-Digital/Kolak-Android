@@ -3,10 +3,13 @@ package peak.org.kolok;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.daprlabs.cardstack.SwipeDeck;
+import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
 
@@ -15,6 +18,10 @@ public class IssueActivity extends AppCompatActivity {
     private ProgressBar loadingBar;
     private TextView loadingText;
     private SwipeDeck cardStack;
+    private ArrayList<String> al;
+    private ArrayAdapter<String> arrayAdapter;
+    private int i;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +38,6 @@ public class IssueActivity extends AppCompatActivity {
         loadingBar = (ProgressBar) findViewById(R.id.loadingBar);
         loadingText = (TextView) findViewById(R.id.loadingText);
 
-        cardStack = (SwipeDeck) findViewById(R.id.swipe_deck);
-
         final ArrayList<String> testData = new ArrayList<>();
         testData.add("0");
         testData.add("1");
@@ -40,39 +45,65 @@ public class IssueActivity extends AppCompatActivity {
         testData.add("3");
         testData.add("4");
 
-        final SwipeDeckAdapter adapter = new SwipeDeckAdapter(testData, this);
-        cardStack.setAdapter(adapter);
+        //add the view via xml or programmatically
+        SwipeFlingAdapterView flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
 
-        cardStack.setEventCallback(new SwipeDeck.SwipeEventCallback() {
+        al = new ArrayList<String>();
+        al.add("php");
+        al.add("c");
+        al.add("python");
+        al.add("java");
 
+        //choose your favorite adapter
+        arrayAdapter = new ArrayAdapter<String>(this, R.layout.item, R.id.helloText, al );
+
+        //set the listener and the adapter
+        flingContainer.setAdapter(arrayAdapter);
+        flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
             @Override
-            public void cardActionDown()
-            {
-
+            public void removeFirstObjectInAdapter() {
+                // this is the simplest way to delete an object from the Adapter (/AdapterView)
+                Log.d("LIST", "removed object!");
+                al.remove(0);
+                arrayAdapter.notifyDataSetChanged();
             }
 
             @Override
-            public void cardActionUp()
-            {
-
+            public void onLeftCardExit(Object dataObject) {
+                //Do something on the left!
+                //You also have access to the original object.
+                //If you want to use it just cast it (String) dataObject
+                Toast.makeText(getApplicationContext(), "Left!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void cardSwipedLeft(int position) {
-                Log.i("MainActivity", "card was swiped left, position in adapter: " + position);
+            public void onRightCardExit(Object dataObject) {
+                Toast.makeText(getApplicationContext(), "Right!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void cardSwipedRight(int position) {
-                Log.i("MainActivity", "card was swiped right, position in adapter: " + position);
+            public void onAdapterAboutToEmpty(int itemsInAdapter) {
+                // Ask for more data here
+                al.add("XML ".concat(String.valueOf(i)));
+                arrayAdapter.notifyDataSetChanged();
+                Log.d("LIST", "notified");
+                i++;
             }
 
             @Override
-            public void cardsDepleted() {
-                Log.i("MainActivity", "no more cards");
+            public void onScroll(float v) {
+
             }
+
+
         });
 
-
+        // Optionally add an OnItemClickListener
+        flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClicked(int itemPosition, Object dataObject) {
+                Toast.makeText(getApplicationContext(), "Clicked!", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }
