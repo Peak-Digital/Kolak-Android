@@ -6,4 +6,77 @@
     android:layout_height="match_parent"
     tools:context="peak.org.kolok.LauncherActivity">
 
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="147dp"
+            android:text="K O L O K"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="48sp" />
+
+        <EditText
+            android:id="@+id/emailLogin"
+            style="@android:style/Widget.DeviceDefault.EditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:ems="10"
+            android:hint="Enter your e-mail"
+            android:inputType="textEmailAddress"
+            android:selectAllOnFocus="false"
+            android:singleLine="false" />
+
+        <Button
+            android:id="@+id/submitButton"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="76dp"
+            android:elevation="24dp"
+            android:onClick="onClick"
+            android:text="Submit" />
+
+        <EditText
+            android:id="@+id/passLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/emailLogin"
+            android:layout_centerVertical="true"
+            android:ems="10"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:visibility="invisible" />
+
+        <EditText
+            android:id="@+id/passLoginVer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/passLogin"
+            android:layout_below="@+id/passLogin"
+            android:layout_marginTop="31dp"
+            android:ems="10"
+            android:hint="Verify Password"
+            android:inputType="textPassword"
+            android:visibility="invisible" />
+    </RelativeLayout>
+
+
 </android.support.constraint.ConstraintLayout>
