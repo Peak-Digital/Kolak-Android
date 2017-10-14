@@ -34,5 +34,6 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha8'
     compile 'com.github.apl-devs:appintro:v4.2.2'
     testCompile 'junit:junit:4.12'
-    compile files('libs/JavaSDK-1.0.7.jar')
+    compile 'io.cloudboost:JavaSDK:1.0.7'
+    compile 'com.arasthel:asyncjob-library:1.0.3'
 }

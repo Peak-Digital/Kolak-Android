@@ -6,9 +6,18 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
+import com.arasthel.asyncjob.AsyncJob;
 import com.github.paolorotolo.appintro.AppIntro;
 import com.github.paolorotolo.appintro.AppIntroFragment;
+
+import java.util.ArrayList;
+
+import io.cloudboost.CloudException;
+import io.cloudboost.CloudObject;
+import io.cloudboost.CloudObjectCallback;
+
 
 public class LauncherActivity extends AppIntro implements LoginFragment.OnFragmentInteractionListener {
     @Override
@@ -22,6 +31,12 @@ public class LauncherActivity extends AppIntro implements LoginFragment.OnFragme
 
         // Instead of fragments, you can also use our default slide
         // Just set a title, description, background and image. AppIntro will do the rest.
+
+        if(KolokCloud.cloudBoost == null)
+        {
+            KolokCloud.cloudBoost.init(KolokCloud.CLOUDBOOST_APP_ID, KolokCloud.CLOUDBOOST_API_KEY);
+        }
+
 
         addSlide(new LoginFragment());
 
