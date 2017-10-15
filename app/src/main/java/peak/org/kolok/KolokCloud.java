@@ -66,7 +66,7 @@ public class KolokCloud {
         });
     }
 
-    static void loginUser(final String email, final String password, final CloudBoostCallback onSuccess) {
+    static void loginUser(final String email, final String password, final CloudBoostCallback onSuccess, final CloudBoostCallback onFailure) {
         Log.d("User: ", email);
         Log.d("Pass: ", password);
         AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
@@ -84,6 +84,7 @@ public class KolokCloud {
                         public void done(CloudUser object, CloudException e) {
                             if(e != null){
                                 Log.d("Kolok", "Failed to login.");
+                                onFailure.methodToCallBack();
                                 Log.d("Err", e.toString());
                             }
                             if(object != null){
@@ -118,7 +119,6 @@ public class KolokCloud {
                         @Override
                         public void done(CloudObject x, CloudException t) {
                             if(x != null){
-                                Log.d("ID: ", x.getId());
                                 onSuccess.methodToCallBack();
                             }
                             if(t != null){
