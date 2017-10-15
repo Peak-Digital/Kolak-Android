@@ -2,6 +2,8 @@ package peak.org.kolok;
 
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -32,11 +34,15 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.submitButton) {
+            final TextInputLayout emailLoginWrapper = (TextInputLayout) findViewById(R.id.emailLoginWrapper);
+            final TextInputLayout passLoginWrapper = (TextInputLayout) findViewById(R.id.passLoginWrapper);
+            final TextInputLayout passVerLoginWrapper = (TextInputLayout) findViewById(R.id.passLoginVerWrapper);
             final EditText et = (EditText) findViewById(R.id.emailLogin);
             final EditText etPass = (EditText) findViewById(R.id.passLogin);
             final EditText etPassVer = (EditText) findViewById(R.id.passLoginVer);
             final Button submit = (Button) findViewById(R.id.submitButton);
             final Button signUp = (Button) findViewById(R.id.signUpSubmit);
+            final Button login  = (Button) findViewById(R.id.loginSubmit);
             final String userEmail = et.getText().toString();
             KolokCloud.getUser(userEmail, new KolokCallback() {
                 @Override
@@ -44,8 +50,8 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            etPass.setVisibility(View.VISIBLE);
-                            etPassVer.setVisibility(View.VISIBLE);
+                            passLoginWrapper.setVisibility(View.VISIBLE);
+                            passVerLoginWrapper.setVisibility(View.VISIBLE);
                             submit.setVisibility(View.INVISIBLE);
                             signUp.setVisibility(View.VISIBLE);
                         }
@@ -57,15 +63,8 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            etPass.setVisibility(View.VISIBLE);
-                            String userPass = etPass.getText().toString();
-                            KolokCloud.loginUser(userEmail, userPass, new KolokCallback() {
-                                @Override
-                                public void methodToCall() {
-                                    Intent myIntent = new Intent(getApplicationContext(), IssueActivity.class);
-                                    startActivity(myIntent);
-                                }
-                            });
+                            passLoginWrapper.setVisibility(View.VISIBLE);
+                            login.setVisibility(View.VISIBLE);
                         }
                     });
                 }
@@ -88,6 +87,38 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
                     public void methodToCall() {
                         Intent myIntent = new Intent(getApplicationContext(), IssueActivity.class);
                         startActivity(myIntent);
+                    }
+                }, new CloudBoostCallback() {
+                    @Override
+                    public void methodToCallBack() {
+
+                    }
+                });
+            }
+        });
+    }
+
+    public void onClickLogin(View v) {
+        Log.d("KOLOK:", "WE in this bitch");
+        final EditText et = (EditText) findViewById(R.id.emailLogin);
+        final EditText etPass = (EditText) findViewById(R.id.passLogin);
+        final EditText etPassVer = (EditText) findViewById(R.id.passLoginVer);
+        final TextInputLayout passLoginWrapper = (TextInputLayout) findViewById(R.id.passLoginWrapper);
+        final String userEmail = et.getText().toString();
+        final String userPass = etPass.getText().toString();
+        KolokCloud.loginUser(userEmail, userPass, new CloudBoostCallback() {
+            @Override
+            public void methodToCallBack() {
+                Intent myIntent = new Intent(getApplicationContext(), IssueActivity.class);
+                startActivity(myIntent);
+            }
+        }, new CloudBoostCallback() {
+            @Override
+            public void methodToCallBack() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        passLoginWrapper.setError("Not a valid password!");
                     }
                 });
             }
