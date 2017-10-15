@@ -72,6 +72,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:text="TextView"
+                android:textAlignment="center"
                 android:visibility="visible" />
 
         </RelativeLayout>
