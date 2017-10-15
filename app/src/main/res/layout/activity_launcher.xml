@@ -10,7 +10,7 @@
     <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/background_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -25,6 +25,7 @@
             android:layout_above="@+id/passLoginWrapper"
             android:layout_alignParentStart="true"
             android:layout_marginBottom="37dp"
+            android:textColorHint="@color/colorTundora"
             android:weightSum="1">
 
             <EditText
@@ -36,11 +37,18 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="35dp"
                 android:layout_weight="0.54"
+                android:autoText="false"
+                android:backgroundTint="@color/colorTundora"
+                android:backgroundTintMode="@color/colorTundora"
                 android:ems="10"
                 android:hint="Enter your e-mail"
                 android:inputType="textEmailAddress"
                 android:selectAllOnFocus="false"
-                android:singleLine="false" />
+                android:singleLine="false"
+                android:textAllCaps="false"
+                android:textColorHighlight="@color/colorTundora"
+                android:textColorHint="@color/colorTundora"
+                android:textColorLink="@color/colorTundora" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -50,6 +58,7 @@
             android:layout_above="@+id/passLoginVerWrapper"
             android:layout_alignParentStart="true"
             android:layout_marginBottom="35dp"
+            android:textColorHint="@color/colorTundora"
             android:visibility="invisible">
 
             <EditText
@@ -60,9 +69,11 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="35dp"
                 android:layout_weight="1"
+                android:backgroundTint="@color/colorTundora"
                 android:ems="10"
                 android:hint="Password"
                 android:inputType="textPassword"
+                android:textColorLink="@color/colorTundora"
                 android:visibility="visible" />
         </android.support.design.widget.TextInputLayout>
 
@@ -74,6 +85,7 @@
             android:layout_alignParentStart="true"
             android:layout_marginBottom="46dp"
             android:layout_marginLeft="35dp"
+            android:textColorHint="@color/colorTundora"
             android:visibility="invisible"
             android:weightSum="1">
 
@@ -84,10 +96,14 @@
                 android:layout_alignStart="@+id/passLogin"
                 android:layout_below="@+id/passLogin"
                 android:layout_weight="0.12"
+                android:backgroundTint="@color/colorTundora"
                 android:ems="10"
                 android:hint="Verify Password"
                 android:inputType="textPassword"
                 android:selectAllOnFocus="false"
+                android:textColorHighlight="@color/colorTundora"
+                android:textColorHint="@color/colorTundora"
+                android:textColorLink="@color/colorTundora"
                 android:visibility="visible" />
         </android.support.design.widget.TextInputLayout>
 
@@ -100,7 +116,7 @@
             android:layout_marginTop="147dp"
             android:text="K O L O K"
             android:textAlignment="center"
-            android:textColor="@android:color/white"
+            android:textColor="@color/colorGold"
             android:textSize="48sp" />
 
         <Button
@@ -111,9 +127,12 @@
             android:layout_alignBaseline="@+id/submitButton"
             android:layout_alignBottom="@+id/submitButton"
             android:layout_alignStart="@+id/submitButton"
+            android:backgroundTint="@color/colorTundora"
             android:elevation="24dp"
             android:onClick="onClickSubmit"
             android:text="Sign Up"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
             android:visibility="invisible" />
 
         <Button
@@ -124,9 +143,12 @@
             android:layout_alignBaseline="@+id/submitButton"
             android:layout_alignBottom="@+id/submitButton"
             android:layout_alignStart="@+id/submitButton"
+            android:backgroundTint="@color/colorTundora"
             android:elevation="24dp"
             android:onClick="onClickLogin"
             android:text="Login"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
             android:visibility="invisible" />
 
         <Button
@@ -137,9 +159,12 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="76dp"
+            android:backgroundTint="@color/colorTundora"
             android:elevation="24dp"
             android:onClick="onClick"
-            android:text="Submit" />
+            android:text="Submit"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
 
     </RelativeLayout>
 

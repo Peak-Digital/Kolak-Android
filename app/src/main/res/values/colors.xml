@@ -3,4 +3,10 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#ff4081</color>
+    <color name="colorPinkbak">#fc5c7d</color>
+    <color name="colorBluebak">#6a82fb</color>
+    <color name="colorPink">#E44336</color>
+    <color name="colorBlue">#2196f3</color>
+    <color name="colorGold">#cfba5f</color>
+    <color name="colorTundora">#424242</color>
 </resources>
