@@ -88,9 +88,9 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
                         Intent myIntent = new Intent(getApplicationContext(), IssueActivity.class);
                         startActivity(myIntent);
                     }
-                }, new CloudBoostCallback() {
+                }, new KolokCallback() {
                     @Override
-                    public void methodToCallBack() {
+                    public void methodToCall() {
 
                     }
                 });
@@ -106,15 +106,15 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
         final TextInputLayout passLoginWrapper = (TextInputLayout) findViewById(R.id.passLoginWrapper);
         final String userEmail = et.getText().toString();
         final String userPass = etPass.getText().toString();
-        KolokCloud.loginUser(userEmail, userPass, new CloudBoostCallback() {
+        KolokCloud.loginUser(userEmail, userPass, new KolokCallback() {
             @Override
-            public void methodToCallBack() {
+            public void methodToCall() {
                 Intent myIntent = new Intent(getApplicationContext(), IssueActivity.class);
                 startActivity(myIntent);
             }
-        }, new CloudBoostCallback() {
+        }, new KolokCallback() {
             @Override
-            public void methodToCallBack() {
+            public void methodToCall() {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
