@@ -1,9 +1,12 @@
 package peak.org.kolok;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -28,6 +31,7 @@ public class IssueActivity extends AppCompatActivity {
     private SwipeFlingAdapterView baitSwipeView;
     private RelativeLayout optionsContainer;
     private TextView baitQuestion;
+    private TextView baitSummary;
 
     private ArrayList<HashMap<String, String>> baitTopics;
     private SwipeAdapter swipeAdapter;
@@ -40,7 +44,7 @@ public class IssueActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_issue);
+        setContentView(R.layout.activity_issue_card);
 
         if(KolokCloud.cloudBoost == null)
         {
@@ -55,6 +59,7 @@ public class IssueActivity extends AppCompatActivity {
         baitSwipeView = (SwipeFlingAdapterView) findViewById(R.id.baitSwipeFrame);
         optionsContainer = (RelativeLayout) findViewById(R.id.optionsContainer);
         baitQuestion = (TextView) findViewById(R.id.baitQuestion);
+        baitSummary = (TextView) findViewById((R.id.baitSummary));
 
         KolokBackend.getBait(new KolokCallback() {
             @Override
@@ -113,7 +118,10 @@ public class IssueActivity extends AppCompatActivity {
 
     private void setTopicText(HashMap<String, String> topic)
     {
+        String summaryLine = "Source | " + "<b>" + topic.get("source") + "</b>" + "<br><br>" + topic.get("summary");
+
         baitQuestion.setText(topic.get("title"));
+        baitSummary.setText(Html.fromHtml(summaryLine));
     }
 
     private void setupSwipeView()
@@ -147,6 +155,7 @@ public class IssueActivity extends AppCompatActivity {
 
                 if(baitTopics.size() > 0)
                 {
+                    Log.d("KOLOK: ", "Setting Image");
                     setTopicText(baitTopics.get(baitSwipeFrame.getFirstVisiblePosition()));
                 }
 
@@ -177,7 +186,10 @@ public class IssueActivity extends AppCompatActivity {
         baitSwipeFrame.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
             @Override
             public void onItemClicked(int itemPosition, Object dataObject) {
-                Toast.makeText(getApplicationContext(), "Clicked!", Toast.LENGTH_LONG).show();
+
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(baitTopics.get(itemPosition).get("url")));
+                startActivity(browserIntent);
+
             }
         });
 

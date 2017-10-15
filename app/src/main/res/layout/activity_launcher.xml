@@ -116,7 +116,7 @@
             android:layout_marginTop="147dp"
             android:text="K O L O K"
             android:textAlignment="center"
-            android:textColor="@color/colorGold"
+            android:textColor="@android:color/white"
             android:textSize="48sp" />
 
         <Button
