@@ -21,6 +21,7 @@ import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 import static android.view.View.GONE;
 
@@ -32,6 +33,7 @@ public class IssueActivity extends AppCompatActivity {
     private RelativeLayout optionsContainer;
     private TextView baitQuestion;
     private TextView baitSummary;
+    private ArrayList<String> loadingPhrases;
 
     private ArrayList<HashMap<String, String>> baitTopics;
     private SwipeAdapter swipeAdapter;
@@ -55,6 +57,15 @@ public class IssueActivity extends AppCompatActivity {
 
         loadingBar = (ProgressBar) findViewById(R.id.loadingBar);
         loadingText = (TextView) findViewById(R.id.loadingText);
+
+        loadingPhrases = new ArrayList<String>();
+
+        loadingPhrases.add(getString(R.string.loading_almonds));
+        loadingPhrases.add(getString(R.string.loading_beans));
+        loadingPhrases.add(getString(R.string.loading_original));
+        loadingPhrases.add(getString(R.string.loading_seabass));
+
+        loadingText.setText(loadingPhrases.get(new Random().nextInt(loadingPhrases.size())));
 
         baitSwipeView = (SwipeFlingAdapterView) findViewById(R.id.baitSwipeFrame);
         optionsContainer = (RelativeLayout) findViewById(R.id.optionsContainer);

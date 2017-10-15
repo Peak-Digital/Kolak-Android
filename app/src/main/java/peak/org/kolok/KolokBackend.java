@@ -35,7 +35,7 @@ public class KolokBackend {
                 try
                 {
                     Request request = new Request.Builder()
-                            .url(backendServer + "/api/bait")
+                            .url(backendServer + "/api/unified")
                             .build();
 
                     Response response = httpClient.newCall(request).execute();
