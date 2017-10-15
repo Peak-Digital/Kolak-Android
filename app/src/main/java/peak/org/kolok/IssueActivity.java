@@ -153,6 +153,11 @@ public class IssueActivity extends AppCompatActivity {
 
     private void setTopicText(HashMap<String, Object> topic)
     {
+        if(((Double)topic.get("reduced")).intValue() == 100)
+        {
+            topic.put("reduced", (Double) topic.get("reduced") - 1.0 );
+        }
+
         String summaryLine = "Source | " + "<b>" + topic.get("source") + "</b>" + "<br> Reduced by | <b>" + ((Double)topic.get("reduced")).intValue() + "% </b> <br><br>" + topic.get("summary");
 
         baitQuestion.setText((String) topic.get("title"));
@@ -184,6 +189,7 @@ public class IssueActivity extends AppCompatActivity {
 
             @Override
             public void onLeftCardExit(Object dataObject) {
+
                 if(baitTopics.size() > 0)
                 {
                     Log.d("KOLOK: ", "Setting Image");
@@ -205,6 +211,13 @@ public class IssueActivity extends AppCompatActivity {
 
             @Override
             public void onRightCardExit(Object dataObject) {
+
+                if(baitTopics.size() > 0)
+                {
+                    Log.d("KOLOK: ", "Setting Image");
+                    setTopicText(baitTopics.get(baitSwipeFrame.getFirstVisiblePosition()));
+                }
+
                 HashMap<String, String> baitTopic = (HashMap<String, String>) dataObject;
 
                 String interestPhrase = interestPhrases.get(new Random().nextInt(interestPhrases.size()));
@@ -220,7 +233,7 @@ public class IssueActivity extends AppCompatActivity {
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
                 swipeAdapter.notifyDataSetChanged();
-                Log.d("LIST", "notified");
+                Log.d("Kolok", "Notified adapter about to empty.");
             }
 
             @Override

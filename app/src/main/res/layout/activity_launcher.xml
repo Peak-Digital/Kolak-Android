@@ -22,11 +22,11 @@
             android:id="@+id/emailLoginWrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/passLoginWrapper"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="37dp"
+            android:layout_marginBottom="11dp"
             android:textColorHint="@color/colorTundora"
-            android:weightSum="1">
+            android:weightSum="1"
+            android:layout_above="@+id/passLoginWrapper"
+            android:layout_alignEnd="@+id/passLoginVerWrapper">
 
             <EditText
                 android:id="@+id/emailLogin"
@@ -55,11 +55,11 @@
             android:id="@+id/passLoginWrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/passLoginVerWrapper"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="35dp"
+            android:layout_marginBottom="17dp"
             android:textColorHint="@color/colorTundora"
-            android:visibility="invisible">
+            android:visibility="invisible"
+            android:layout_above="@+id/passLoginVerWrapper"
+            android:layout_alignParentStart="true">
 
             <EditText
                 android:id="@+id/passLogin"
@@ -81,13 +81,13 @@
             android:id="@+id/passLoginVerWrapper"
             android:layout_width="345dp"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/signUpSubmit"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="46dp"
+            android:layout_marginBottom="23dp"
             android:layout_marginLeft="35dp"
             android:textColorHint="@color/colorTundora"
             android:visibility="invisible"
-            android:weightSum="1">
+            android:weightSum="1"
+            android:layout_above="@+id/signUpSubmit"
+            android:layout_alignParentStart="true">
 
             <EditText
                 android:id="@+id/passLoginVer"
@@ -95,7 +95,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@+id/passLogin"
                 android:layout_below="@+id/passLogin"
-                android:layout_weight="0.12"
                 android:backgroundTint="@color/colorTundora"
                 android:ems="10"
                 android:hint="Verify Password"
@@ -117,7 +116,7 @@
             android:text="K O L O K"
             android:textAlignment="center"
             android:textColor="@android:color/white"
-            android:textSize="48sp" />
+            android:textSize="72sp" />
 
         <Button
             android:id="@+id/signUpSubmit"
