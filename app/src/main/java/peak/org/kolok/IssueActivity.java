@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
@@ -21,6 +22,7 @@ import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Random;
 
 import static android.view.View.GONE;
@@ -34,8 +36,13 @@ public class IssueActivity extends AppCompatActivity {
     private TextView baitQuestion;
     private TextView baitSummary;
     private ArrayList<String> loadingPhrases;
+    private ArrayList<String> interestPhrases;
+    private ArrayList<String> disinterestPhrases;
 
-    private ArrayList<HashMap<String, String>> baitTopics;
+
+    private RelativeLayout baseLayout;
+
+    private ArrayList<HashMap<String, Object>> baitTopics;
     private SwipeAdapter swipeAdapter;
     private SwipeFlingAdapterView baitSwipeFrame;
 
@@ -59,15 +66,14 @@ public class IssueActivity extends AppCompatActivity {
         loadingText = (TextView) findViewById(R.id.loadingText);
 
         loadingPhrases = new ArrayList<String>();
+        disinterestPhrases = new ArrayList<String>();
+        interestPhrases = new ArrayList<String>();
 
-        loadingPhrases.add(getString(R.string.loading_almonds));
-        loadingPhrases.add(getString(R.string.loading_beans));
-        loadingPhrases.add(getString(R.string.loading_original));
-        loadingPhrases.add(getString(R.string.loading_seabass));
+        setupRandomPhrases();
 
-        loadingText.setText(loadingPhrases.get(new Random().nextInt(loadingPhrases.size())));
 
         baitSwipeView = (SwipeFlingAdapterView) findViewById(R.id.baitSwipeFrame);
+        baseLayout = (RelativeLayout) findViewById(R.id.baseLayout);
         optionsContainer = (RelativeLayout) findViewById(R.id.optionsContainer);
         baitQuestion = (TextView) findViewById(R.id.baitQuestion);
         baitSummary = (TextView) findViewById((R.id.baitSummary));
@@ -85,7 +91,7 @@ public class IssueActivity extends AppCompatActivity {
                     @Override
                     public void run() {
 
-                        baitTopics = (ArrayList<HashMap<String, String>>) data;
+                        baitTopics = (ArrayList<HashMap<String, Object>>) data;
 
                         setupSwipeView();
 
@@ -98,6 +104,24 @@ public class IssueActivity extends AppCompatActivity {
 
     }
 
+    private void setupRandomPhrases()
+    {
+        loadingPhrases.add(getString(R.string.loading_almonds));
+        loadingPhrases.add(getString(R.string.loading_beans));
+        loadingPhrases.add(getString(R.string.loading_original));
+        loadingPhrases.add(getString(R.string.loading_seabass));
+
+        loadingText.setText(loadingPhrases.get(new Random().nextInt(loadingPhrases.size())));
+
+        interestPhrases.add(getString(R.string.interest_one));
+        interestPhrases.add(getString(R.string.interest_two));
+        interestPhrases.add(getString(R.string.interest_three));
+
+        disinterestPhrases.add(getString(R.string.disinterest_one));
+        disinterestPhrases.add(getString(R.string.disinterest_two));
+        disinterestPhrases.add(getString(R.string.disinterest_three));
+
+    }
     public void showSwipeView()
     {
         if(baitSwipeView.getVisibility() == GONE)
@@ -127,11 +151,11 @@ public class IssueActivity extends AppCompatActivity {
         }
     }
 
-    private void setTopicText(HashMap<String, String> topic)
+    private void setTopicText(HashMap<String, Object> topic)
     {
-        String summaryLine = "Source | " + "<b>" + topic.get("source") + "</b>" + "<br><br>" + topic.get("summary");
+        String summaryLine = "Source | " + "<b>" + topic.get("source") + "</b>" + "<br> Reduced by | <b>" + ((Double)topic.get("reduced")).intValue() + "% </b> <br><br>" + topic.get("summary");
 
-        baitQuestion.setText(topic.get("title"));
+        baitQuestion.setText((String) topic.get("title"));
         baitSummary.setText(Html.fromHtml(summaryLine));
     }
 
@@ -160,27 +184,41 @@ public class IssueActivity extends AppCompatActivity {
 
             @Override
             public void onLeftCardExit(Object dataObject) {
-                //Do something on the left!
-                //You also have access to the original object.
-                //If you want to use it just cast it (String) dataObject
-
                 if(baitTopics.size() > 0)
                 {
                     Log.d("KOLOK: ", "Setting Image");
                     setTopicText(baitTopics.get(baitSwipeFrame.getFirstVisiblePosition()));
                 }
 
+                HashMap<String, String> baitTopic = (HashMap<String, String>) dataObject;
+
+                String disinterestPhrase = disinterestPhrases.get(new Random().nextInt(disinterestPhrases.size()));
+
+                Snackbar snackbar = Snackbar
+                        .make(baseLayout, disinterestPhrase, Snackbar.LENGTH_SHORT);
+
+                snackbar.show();
+
+                KolokCloud.swipeEvent(baitTopic.get("title"), false);
+
             }
 
             @Override
             public void onRightCardExit(Object dataObject) {
-//                Toast.makeText(getApplicationContext(), "Right!", Toast.LENGTH_SHORT).show();
+                HashMap<String, String> baitTopic = (HashMap<String, String>) dataObject;
+
+                String interestPhrase = interestPhrases.get(new Random().nextInt(interestPhrases.size()));
+
+                Snackbar snackbar = Snackbar
+                        .make(baseLayout, interestPhrase, Snackbar.LENGTH_SHORT);
+
+                snackbar.show();
+
+                KolokCloud.swipeEvent(baitTopic.get("title"), true);
             }
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
-                // Ask for more data here
-//                baitTopics.add("XML ".concat(String.valueOf(element)));
                 swipeAdapter.notifyDataSetChanged();
                 Log.d("LIST", "notified");
             }
@@ -198,7 +236,7 @@ public class IssueActivity extends AppCompatActivity {
             @Override
             public void onItemClicked(int itemPosition, Object dataObject) {
 
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(baitTopics.get(itemPosition).get("url")));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse((String) baitTopics.get(itemPosition).get("url")));
                 startActivity(browserIntent);
 
             }

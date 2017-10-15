@@ -34,9 +34,9 @@ public class SwipeAdapter extends ArrayAdapter {
     private Context context;
     private LayoutInflater inflater;
 
-    private ArrayList<HashMap<String, String>> bait_topics;
+    private ArrayList<HashMap<String, Object>> bait_topics;
 
-    public SwipeAdapter(Context context, ArrayList<HashMap<String, String>> bait_topics) {
+    public SwipeAdapter(Context context, ArrayList<HashMap<String, Object>> bait_topics) {
         super(context, R.layout.bait_item, bait_topics);
 
         this.context = context;
@@ -55,7 +55,7 @@ public class SwipeAdapter extends ArrayAdapter {
 
         Picasso
                 .with(context)
-                .load(bait_topics.get(position).get("image"))
+                .load((String) bait_topics.get(position).get("image"))
                 .into(baitImage);
 
         Target imageViewTarget = new Target() {

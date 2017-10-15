@@ -17,6 +17,44 @@ public class KolokCloud {
 
     static CloudApp cloudBoost = null;
 
+    static void swipeEvent(final String topic, final boolean likedTopic)
+    {
+
+        AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
+            @Override
+            public void doOnBackground() {
+
+                CloudObject newSwipe = new CloudObject("Swipe");
+
+                CloudUser thisUser = CloudUser.getcurrentUser();
+
+                if(thisUser != null) {
+                    try {
+                        newSwipe.set("user_email", thisUser.getEmail());
+                        newSwipe.set("topic", topic);
+                        newSwipe.set("likedTopic", likedTopic);
+
+                        //Save the object
+                        newSwipe.save(new CloudObjectCallback() {
+                            @Override
+                            public void done(CloudObject object, CloudException err) {
+                                if (err != null) {
+                                    Log.d("Kolok", "Failed to save.");
+                                    Log.d("Err", err.toString());
+                                }
+                                if (object != null) {
+                                    //object saved successfully
+                                    Log.d("Kolok", "Saved like successfully.");
+                                }
+                            }
+                        });
+                    } catch (CloudException e) {
+                        Log.d("Kolok", "Failed to contact cloudboost.");
+                    }
+                }
+            }
+        });
+    }
 
     static void createUser(final String email, final String pass, final KolokCallback onSuccess)
     {

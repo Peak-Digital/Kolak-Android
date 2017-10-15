@@ -5,5 +5,10 @@
     <string name="loading_almonds">Activating some almonds...</string>
     <string name="loading_seabass">Grilling some chilean sea bass...</string>
     <string name="loading_beans">Steaming some beans...</string>
-
+    <string name="disinterest_one">Nope.</string>
+    <string name="disinterest_two">Boring.</string>
+    <string name="disinterest_three">Don\'t care.</string>
+    <string name="interest_one">Love it.</string>
+    <string name="interest_two">That was dope.</string>
+    <string name="interest_three">Loved that article.</string>
 </resources>
