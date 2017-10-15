@@ -1,11 +1,7 @@
 package peak.org.kolok;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
-import android.net.Uri;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -42,9 +38,9 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
             final Button submit = (Button) findViewById(R.id.submitButton);
             final Button signUp = (Button) findViewById(R.id.signUpSubmit);
             final String userEmail = et.getText().toString();
-            KolokCloud.getUser(userEmail, new CloudBoostCallback() {
+            KolokCloud.getUser(userEmail, new KolokCallback() {
                 @Override
-                public void methodToCallBack() {
+                public void methodToCall() {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -55,17 +51,17 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
                         }
                     });
                 }
-            }, new CloudBoostCallback() {
+            }, new KolokCallback() {
                 @Override
-                public void methodToCallBack() {
+                public void methodToCall() {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             etPass.setVisibility(View.VISIBLE);
                             String userPass = etPass.getText().toString();
-                            KolokCloud.loginUser(userEmail, userPass, new CloudBoostCallback() {
+                            KolokCloud.loginUser(userEmail, userPass, new KolokCallback() {
                                 @Override
-                                public void methodToCallBack() {
+                                public void methodToCall() {
                                     Intent myIntent = new Intent(getApplicationContext(), IssueActivity.class);
                                     startActivity(myIntent);
                                 }
@@ -84,12 +80,12 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
         final EditText etPassVer = (EditText) findViewById(R.id.passLoginVer);
         final String userEmail = et.getText().toString();
         final String userPass = etPass.getText().toString();
-        KolokCloud.createUser(userEmail, userPass, new CloudBoostCallback() {
+        KolokCloud.createUser(userEmail, userPass, new KolokCallback() {
             @Override
-            public void methodToCallBack() {
-                KolokCloud.loginUser(userEmail, userPass, new CloudBoostCallback() {
+            public void methodToCall() {
+                KolokCloud.loginUser(userEmail, userPass, new KolokCallback() {
                     @Override
-                    public void methodToCallBack() {
+                    public void methodToCall() {
                         Intent myIntent = new Intent(getApplicationContext(), IssueActivity.class);
                         startActivity(myIntent);
                     }

@@ -13,11 +13,9 @@
         android:layout_centerInParent="true"
         android:layout_gravity="center"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:indeterminate="true"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -30,8 +28,8 @@
         <ProgressBar
             android:id="@+id/loadingBar"
             style="@style/Widget.AppCompat.ProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:visibility="gone" />
@@ -40,38 +38,42 @@
             android:id="@+id/loadingText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/loadingBar"
+            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="48dp"
+            android:layout_marginBottom="64dp"
             android:text="@string/loading_almonds"
             android:textAppearance="@android:style/TextAppearance.Widget.TextView"
-            android:textSize="24sp"
+            android:textSize="18sp"
             android:visibility="gone" />
 
 
         <com.lorentzos.flingswipe.SwipeFlingAdapterView
-            android:id="@+id/frame"
-            android:background="#ffeee9e2"
+            android:id="@+id/baitSwipeFrame"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:rotation_degrees="15.5"
+            android:layout_above="@+id/optionsContainer"
+            android:layout_alignParentEnd="true"
             android:layout_marginBottom="20dp"
-            android:layout_above="@+id/relativeLayout"
-            android:layout_alignParentEnd="true" />
+            android:background="#ffeee9e2"
+            android:visibility="visible"
+            app:rotation_degrees="15.5" />
 
         <RelativeLayout
+            android:id="@+id/optionsContainer"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="200dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
-            android:id="@+id/relativeLayout">
+            android:visibility="visible">
 
             <TextView
-                android:layout_centerHorizontal="true"
                 android:id="@+id/baitQuestion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:layout_centerHorizontal="true"
+                android:text="TextView"
+                android:visibility="visible" />
+
         </RelativeLayout>
 
 

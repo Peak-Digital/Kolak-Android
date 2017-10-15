@@ -1,26 +1,39 @@
 package peak.org.kolok;
 
+import android.app.Activity;
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.animation.Animation;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.daprlabs.cardstack.SwipeDeck;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import static android.view.View.GONE;
 
 public class IssueActivity extends AppCompatActivity {
 
     private ProgressBar loadingBar;
     private TextView loadingText;
-    private SwipeDeck cardStack;
-    private ArrayList<String> al;
-    private ArrayAdapter<String> arrayAdapter;
-    private int i;
+    private SwipeFlingAdapterView baitSwipeView;
+    private RelativeLayout optionsContainer;
+    private TextView baitQuestion;
+
+    private ArrayList<HashMap<String, String>> baitTopics;
+    private SwipeAdapter swipeAdapter;
+    private SwipeFlingAdapterView baitSwipeFrame;
+
+    public static IssueActivity issueActivity;
 
 
     @Override
@@ -34,38 +47,96 @@ public class IssueActivity extends AppCompatActivity {
             KolokCloud.cloudBoost.init(KolokCloud.CLOUDBOOST_APP_ID, KolokCloud.CLOUDBOOST_API_KEY);
         }
 
+        issueActivity = this;
 
         loadingBar = (ProgressBar) findViewById(R.id.loadingBar);
         loadingText = (TextView) findViewById(R.id.loadingText);
 
-        final ArrayList<String> testData = new ArrayList<>();
-        testData.add("0");
-        testData.add("1");
-        testData.add("2");
-        testData.add("3");
-        testData.add("4");
+        baitSwipeView = (SwipeFlingAdapterView) findViewById(R.id.baitSwipeFrame);
+        optionsContainer = (RelativeLayout) findViewById(R.id.optionsContainer);
+        baitQuestion = (TextView) findViewById(R.id.baitQuestion);
+
+        KolokBackend.getBait(new KolokCallback() {
+            @Override
+            public void methodToCall() {
+                Log.e("Kolak", "You done fucked up.");
+            }
+        }, new KolokDataCallback() {
+            @Override
+            public void methodToCall(final Object data) {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        baitTopics = (ArrayList<HashMap<String, String>>) data;
+
+                        setupSwipeView();
+
+                        showSwipeView();
+                    }
+                });
+
+            }
+        });
+
+    }
+
+    public void showSwipeView()
+    {
+        if(baitSwipeView.getVisibility() == GONE)
+        {
+            loadingBar.setVisibility(GONE);
+            loadingText.setVisibility(GONE);
+
+
+            baitSwipeView.setVisibility(View.VISIBLE);
+            baitQuestion.setVisibility(View.VISIBLE);
+            optionsContainer.setVisibility(View.VISIBLE);
+            baitQuestion.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void showProgressBars()
+    {
+        if(loadingBar.getVisibility() == GONE)
+        {
+            baitSwipeView.setVisibility(View.GONE);
+            baitQuestion.setVisibility(View.GONE);
+            optionsContainer.setVisibility(View.GONE);
+            baitQuestion.setVisibility(View.GONE);
+
+            loadingBar.setVisibility(View.VISIBLE);
+            loadingText.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void setTopicText(HashMap<String, String> topic)
+    {
+        baitQuestion.setText(topic.get("title"));
+    }
+
+    private void setupSwipeView()
+    {
+
 
         //add the view via xml or programmatically
-        SwipeFlingAdapterView flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
+        baitSwipeFrame = (SwipeFlingAdapterView) findViewById(R.id.baitSwipeFrame);
 
-        al = new ArrayList<String>();
-        al.add("php");
-        al.add("c");
-        al.add("python");
-        al.add("java");
 
         //choose your favorite adapter
-        arrayAdapter = new ArrayAdapter<String>(this, R.layout.item, R.id.helloText, al );
+        swipeAdapter = new SwipeAdapter(getApplicationContext(), baitTopics);
 
         //set the listener and the adapter
-        flingContainer.setAdapter(arrayAdapter);
-        flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
+        baitSwipeFrame.setAdapter(swipeAdapter);
+
+        baitSwipeFrame.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
             @Override
             public void removeFirstObjectInAdapter() {
                 // this is the simplest way to delete an object from the Adapter (/AdapterView)
                 Log.d("LIST", "removed object!");
-                al.remove(0);
-                arrayAdapter.notifyDataSetChanged();
+                baitTopics.remove(0);
+                swipeAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -73,21 +144,25 @@ public class IssueActivity extends AppCompatActivity {
                 //Do something on the left!
                 //You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
-                Toast.makeText(getApplicationContext(), "Left!", Toast.LENGTH_SHORT).show();
+
+                if(baitTopics.size() > 0)
+                {
+                    setTopicText(baitTopics.get(baitSwipeFrame.getFirstVisiblePosition()));
+                }
+
             }
 
             @Override
             public void onRightCardExit(Object dataObject) {
-                Toast.makeText(getApplicationContext(), "Right!", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "Right!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
                 // Ask for more data here
-                al.add("XML ".concat(String.valueOf(i)));
-                arrayAdapter.notifyDataSetChanged();
+//                baitTopics.add("XML ".concat(String.valueOf(element)));
+                swipeAdapter.notifyDataSetChanged();
                 Log.d("LIST", "notified");
-                i++;
             }
 
             @Override
@@ -99,11 +174,13 @@ public class IssueActivity extends AppCompatActivity {
         });
 
         // Optionally add an OnItemClickListener
-        flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
+        baitSwipeFrame.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
             @Override
             public void onItemClicked(int itemPosition, Object dataObject) {
                 Toast.makeText(getApplicationContext(), "Clicked!", Toast.LENGTH_LONG).show();
             }
         });
+
+        setTopicText(baitTopics.get(baitSwipeFrame.getFirstVisiblePosition()));
     }
 }

@@ -4,12 +4,9 @@ package peak.org.kolok;
  * Created by markrjr on 10/14/17.
  */
 
-import android.content.Intent;
 import android.util.Log;
 
 import com.arasthel.asyncjob.AsyncJob;
-
-import java.util.ArrayList;
 
 import io.cloudboost.*;
 
@@ -21,7 +18,7 @@ public class KolokCloud {
     static CloudApp cloudBoost = null;
 
 
-    static void createUser(final String email, final String pass, final CloudBoostCallback onSuccess)
+    static void createUser(final String email, final String pass, final KolokCallback onSuccess)
     {
         Log.d("USERNAME:",email);
         Log.d("PASSWORD:", pass);
@@ -50,7 +47,7 @@ public class KolokCloud {
                                     AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
                                         @Override
                                         public void doInUIThread() {
-                                            onSuccess.methodToCallBack();
+                                            onSuccess.methodToCall();
                                         }
                                     });
                                     Log.d("Kolok", "We did it.");
@@ -66,7 +63,7 @@ public class KolokCloud {
         });
     }
 
-    static void loginUser(final String email, final String password, final CloudBoostCallback onSuccess) {
+    static void loginUser(final String email, final String password, final KolokCallback onSuccess) {
         Log.d("User: ", email);
         Log.d("Pass: ", password);
         AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
@@ -89,7 +86,7 @@ public class KolokCloud {
                             if(object != null){
                                 //object saved successfully
                                 Log.d("Kolok", "We logged in.");
-                                onSuccess.methodToCallBack();
+                                onSuccess.methodToCall();
                             }
                         }
                     });
@@ -102,7 +99,7 @@ public class KolokCloud {
         });
     }
 
-    static void getUser(final String email, final CloudBoostCallback onFailure, final CloudBoostCallback onSuccess)
+    static void getUser(final String email, final KolokCallback onFailure, final KolokCallback onSuccess)
     {
         Log.d("Kolok", "In getUser Function");
         AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
@@ -119,12 +116,12 @@ public class KolokCloud {
                         public void done(CloudObject x, CloudException t) {
                             if(x != null){
                                 Log.d("ID: ", x.getId());
-                                onSuccess.methodToCallBack();
+                                onSuccess.methodToCall();
                             }
                             if(t != null){
                                 //any errors
                                 Log.d("Kolok", "Could not find User");
-                                onFailure.methodToCallBack();
+                                onFailure.methodToCall();
                             }
                         }
                     });
